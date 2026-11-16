@@ -1,0 +1,81 @@
+<div class="page-toolbar">
+    <h2>Commesse</h2>
+
+    @if (authApi.hasRole('Admin')) {
+    <button nz-button nzType="primary" type="button" (click)="onOpen()">
+        Nuova commessa
+    </button>
+    }
+</div>
+
+<app-commissions-filter class="page-filters" (onFilterChange)="onFilterChange($event)">
+</app-commissions-filter>
+
+@if (errore) {
+<p role="alert">{{ errore }}</p>
+}
+
+<nz-table #commissionTable [nzData]="commissions" [nzLoading]="nzHelper.loading" [nzFrontPagination]="false"
+    [nzTotal]="pagination.collectionSize" [nzPageIndex]="pagination.currentPage" [nzPageSize]="pagination.pageSize"
+    [nzShowSizeChanger]="true" (nzQueryParams)="onQueryParamsChange($event)">
+    <thead>
+        <tr>
+            <th nzColumnKey="Code" [nzSortFn]="true">Codice</th>
+            <th nzColumnKey="Description" [nzSortFn]="true">Descrizione</th>
+            <th nzColumnKey="Type" [nzSortFn]="true">Tipo</th>
+            <th nzColumnKey="Status" [nzSortFn]="true">Stato</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (commission of commissionTable.data; track commission.commissionId) {
+        <tr>
+            <td>{{ commission.code }}</td>
+            <td>{{ commission.description }}</td>
+
+            <td>
+                @switch (commission.type) {
+                @case (CommissionType.Planning) { Progetto }
+                @case (CommissionType.Modified) { Modifica }
+                @case (CommissionType.Replacement) { Ricambi }
+                @case (CommissionType.Training) { Formazione }
+                @default { — }
+                }
+            </td>
+
+            <td>
+                @switch (commission.status) {
+                @case (RecordStatus.Active) { Attiva }
+                @case (RecordStatus.Obsolete) { Obsoleta }
+                @default { — }
+                }
+            </td>
+
+            <td>
+                <button nz-button nz-dropdown type="button" nzTrigger="click" [nzDropdownMenu]="commissionActions">
+                    Azioni ▾
+                </button>
+
+                <nz-dropdown-menu #commissionActions="nzDropdownMenu">
+                    <ul nz-menu>
+                        <li nz-menu-item (click)="onView(commission)">
+                            Dettagli
+                        </li>
+
+                        @if (authApi.hasRole('Admin')) {
+                        <li nz-menu-item (click)="onEdit(commission)">
+                            Modifica
+                        </li>
+
+                        <li nz-menu-item nzDanger (click)="onDelete(commission)">
+                            Elimina
+                        </li>
+                        }
+                    </ul>
+                </nz-dropdown-menu>
+            </td>
+        </tr>
+        }
+    </tbody>
+</nz-table>

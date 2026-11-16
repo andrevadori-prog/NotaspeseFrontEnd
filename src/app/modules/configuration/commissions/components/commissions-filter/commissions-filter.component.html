@@ -1,0 +1,44 @@
+<nz-card class="filter-card" nzTitle="Filtri di ricerca">
+    <form class="filter-grid" [formGroup]="filterForm" (ngSubmit)="handleFilterChange()">
+        <div>
+            <label for="commission-filter-code">Codice</label>
+            <input nz-input id="commission-filter-code" formControlName="code" />
+        </div>
+
+        <div>
+            <label for="commission-filter-description">Descrizione</label>
+            <input nz-input id="commission-filter-description" formControlName="description" />
+        </div>
+
+        <div>
+            <label for="commission-filter-type">Tipo</label>
+
+            <nz-select nzId="commission-filter-type" formControlName="type" nzPlaceHolder="Tutti i tipi" nzAllowClear
+                style="width: 100%">
+                <nz-option [nzValue]="CommissionType.Planning" nzLabel="Progetto"></nz-option>
+
+                <nz-option [nzValue]="CommissionType.Modified" nzLabel="Modifica"></nz-option>
+
+                <nz-option [nzValue]="CommissionType.Replacement" nzLabel="Ricambi"></nz-option>
+
+                <nz-option [nzValue]="CommissionType.Training" nzLabel="Formazione"></nz-option>
+            </nz-select>
+        </div>
+
+        <div>
+            <label nz-checkbox formControlName="showObsolete">
+                Mostra anche le obsolete
+            </label>
+        </div>
+
+        <div class="filter-actions">
+            <button nz-button nzType="primary" type="submit">
+                Cerca
+            </button>
+
+            <button nz-button type="button" (click)="resetFilters()">
+                Azzera
+            </button>
+        </div>
+    </form>
+</nz-card>

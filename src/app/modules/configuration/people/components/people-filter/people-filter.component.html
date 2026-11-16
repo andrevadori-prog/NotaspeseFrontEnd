@@ -1,0 +1,34 @@
+<nz-card class="filter-card" nzTitle="Filtri di ricerca">
+    <form class="filter-grid" [formGroup]="filterForm" (ngSubmit)="handleFilterChange()">
+
+        <div>
+            <label for="filter-name">Nome</label>
+            <input nz-input id="filter-name" formControlName="name" placeholder="Cerca per nome" />
+        </div>
+
+        <div>
+            <label for="filter-surname">Cognome</label>
+            <input nz-input id="filter-surname" formControlName="surname" placeholder="Cerca per cognome" />
+        </div>
+
+        <div>
+            <label for="filter-status">Stato</label>
+            <nz-select nzId="filter-status" formControlName="statuses" nzMode="multiple" nzPlaceHolder="Tutti gli stati"
+                nzAllowClear>
+                <nz-option [nzValue]="ConfigEnableMode.Enabled" nzLabel="Abilitato">
+                </nz-option>
+                <nz-option [nzValue]="ConfigEnableMode.Disabled" nzLabel="Disabilitato">
+                </nz-option>
+            </nz-select>
+        </div>
+
+        <div class="filter-actions">
+            <button nz-button nzType="primary" type="submit">
+                Cerca
+            </button>
+            <button nz-button type="button" (click)="resetFilters()">
+                Azzera
+            </button>
+        </div>
+    </form>
+</nz-card>

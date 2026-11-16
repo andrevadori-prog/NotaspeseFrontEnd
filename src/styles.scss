@@ -1,0 +1,326 @@
+/* You can add global styles to this file, and also import other style files */
+
+.filter-card {
+    .ant-card-body {
+        padding: 12px !important;
+    }
+}
+
+.filter-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.mt-1 {
+    margin-top: 0.5rem !important;
+}
+
+.ml-1 {
+    margin-left: 0.5rem !important;
+}
+
+.nz-btn-container {
+    display: flex;
+    justify-content: center;
+
+    *:not(:last-child) {
+        margin-right: 0.4rem;
+    }
+}
+
+.autosize-column {
+    white-space: nowrap;
+    width: 1%;
+    max-width: max-content;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.page-header-fixed {
+    position: sticky;
+    top: 0px;
+    z-index: 10;
+    background: white;
+    padding: 24px 24px 0px 24px;
+}
+
+.page-table-fixed {
+    padding: 12px 24px 0px 24px;
+}
+
+.page-body {
+    padding: 12px 24px 0px 24px;
+}
+
+input.ng-touched.ng-invalid,
+textarea.ng-touched.ng-invalid,
+select.ng-touched.ng-invalid,
+ng-select.ng-touched.ng-invalid,
+nz-input-number.ng-touched.ng-invalid,
+nz-select.ng-touched.ng-invalid,
+nz-date-picker.ng-touched.ng-invalid,
+nz-range-picker.ng-touched.ng-invalid,
+angular-editor.ng-touched.ng-invalid>.angular-editor>.angular-editor-wrapper {
+    border-left: 3px dashed red !important;
+    border: 1px solid red;
+}
+
+.ant-table-tbody>tr>td {
+    padding: 6px 16px !important;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.mt-0 {
+    margin-top: 0 !important;
+}
+
+.ant-modal-body {
+    overflow-y: auto;
+    max-height: calc(100vh - 185px);
+}
+
+.ant-modal {
+    top: 35px;
+}
+
+.info-btn {
+    background-color: #17a2b8; // info base
+    border-color: #17a2b8;
+    color: #fff;
+
+    &:hover,
+    &:focus {
+        background-color: #138496;
+        border-color: #117a8b;
+        color: #fff;
+    }
+
+    &:active {
+        background-color: #117a8b;
+        border-color: #0f6674;
+        color: #fff;
+    }
+
+    &[disabled],
+    &.ant-btn[disabled] {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        color: #fff;
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+}
+
+.mch-switch {
+    display: flex;
+    align-items: center;
+}
+
+/* ----- S P A C I N G ----- */
+
+$spacer: 1rem;
+$spacers: (
+    0: 0,
+    1: $spacer * 0.25,
+    2: $spacer * 0.5,
+    3: $spacer,
+    4: $spacer * 1.5,
+    5: $spacer * 3
+);
+
+@each $key, $value in $spacers {
+    .m-#{$key} {
+        margin: $value !important;
+    }
+
+    .mt-#{$key} {
+        margin-top: $value !important;
+    }
+
+    .mb-#{$key} {
+        margin-bottom: $value !important;
+    }
+
+    .ml-#{$key} {
+        margin-left: $value !important;
+    }
+
+    .mr-#{$key} {
+        margin-right: $value !important;
+    }
+
+    .mx-#{$key} {
+        margin-left: $value !important;
+        margin-right: $value !important;
+    }
+
+    .my-#{$key} {
+        margin-top: $value !important;
+        margin-bottom: $value !important;
+    }
+
+    .p-#{$key} {
+        padding: $value !important;
+    }
+
+    .pt-#{$key} {
+        padding-top: $value !important;
+    }
+
+    .pb-#{$key} {
+        padding-bottom: $value !important;
+    }
+
+    .pl-#{$key} {
+        padding-left: $value !important;
+    }
+
+    .pr-#{$key} {
+        padding-right: $value !important;
+    }
+
+    .px-#{$key} {
+        padding-left: $value !important;
+        padding-right: $value !important;
+    }
+
+    .py-#{$key} {
+        padding-top: $value !important;
+        padding-bottom: $value !important;
+    }
+}
+
+.m-auto {
+    margin: auto !important;
+}
+
+.mx-auto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.my-auto {
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+}
+
+.page-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.page-toolbar h2 {
+  margin: 0;
+}
+
+.page-filters {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.filter-grid label[for] {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.filter-grid nz-select,
+.filter-grid nz-input-number {
+  width: 100%;
+}
+
+.filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 767px) {
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ant-modal-body nz-select,
+.ant-modal-body nz-input-number {
+  width: 100%;
+}
+
+.modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  body > app-root {
+    display: none !important;
+  }
+
+  .cdk-overlay-container,
+  .cdk-global-overlay-wrapper,
+  .expense-summary-print-modal {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .cdk-overlay-backdrop {
+    display: none !important;
+  }
+
+  .expense-summary-print-modal .ant-modal {
+    top: auto !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .expense-summary-print-modal .ant-modal-content {
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .expense-summary-print-modal .ant-modal-close,
+  .expense-summary-print-modal .summary-actions {
+    display: none !important;
+  }
+
+  .expense-summary-print-modal .ant-modal-body {
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+}

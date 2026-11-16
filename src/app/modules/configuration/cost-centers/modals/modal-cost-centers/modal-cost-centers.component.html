@@ -1,0 +1,42 @@
+<form nz-form [formGroup]="costCenterForm" nzLayout="vertical" (ngSubmit)="onSubmit()">
+    <nz-form-item>
+        <nz-form-label nzFor="cost-center-code" nzRequired>
+            Codice
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci un codice di massimo 20 caratteri">
+            <input nz-input id="cost-center-code" formControlName="code" />
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="cost-center-name" nzRequired>
+            Nome
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci un nome di massimo 20 caratteri">
+            <input nz-input id="cost-center-name" formControlName="costCenterName" />
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="cost-center-description" nzRequired>
+            Descrizione
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci una descrizione di massimo 500 caratteri">
+            <textarea nz-input id="cost-center-description" formControlName="description" rows="3"></textarea>
+        </nz-form-control>
+    </nz-form-item>
+    <div class="modal-actions">
+        <button nz-button type="button" [disabled]="salvataggio" (click)="onCancel()">
+            {{ solaLettura ? 'Chiudi' : 'Annulla' }}
+        </button>
+
+        @if (!solaLettura) {
+        <button nz-button nzType="primary" type="submit" [nzLoading]="salvataggio" [disabled]="salvataggio">
+            Salva
+        </button>
+        }
+    </div>
+</form>

@@ -1,0 +1,82 @@
+<nz-layout class="app-layout" [class.public-layout]="!authApi.isAuthenticated()">
+    @if(authApi.isAuthenticated())
+    {
+    <nz-sider class="menu-sidebar" nzTheme="light" nzWidth="240px" nzBreakpoint="md" nzCollapsible
+        [nzCollapsedWidth]="0" [nzTrigger]="null" [(nzCollapsed)]="isCollapsed">
+
+        <div class="sidebar-logo">
+            <a routerLink="/" aria-label="Pagina iniziale">
+                <img src="images/mechanica.svg" alt="Logo Mechanica" />
+            </a>
+        </div>
+
+        <ul id="main-navigation" nz-menu nzMode="inline" aria-label="Navigazione principale">
+
+            @if (authApi.hasRole('Admin')) {
+            <li nz-menu-item routerLinkActive #peopleLink="routerLinkActive" [nzSelected]="peopleLink.isActive">
+                <a routerLink="/configuration/people">Persone</a>
+            </li>
+            }
+
+            <li nz-menu-item routerLinkActive #commissionsLink="routerLinkActive"
+                [nzSelected]="commissionsLink.isActive">
+                <a routerLink="/configuration/commissions">Commesse</a>
+            </li>
+
+            <li nz-menu-item routerLinkActive #costCentersLink="routerLinkActive"
+                [nzSelected]="costCentersLink.isActive">
+                <a routerLink="/configuration/cost-centers">
+                    Centri di costo
+                </a>
+            </li>
+
+            <li nz-menu-item routerLinkActive #expenseReportsLink="routerLinkActive"
+                [nzSelected]="expenseReportsLink.isActive">
+                <a routerLink="/expenses/reports">Note spese</a>
+            </li>
+        </ul>
+    </nz-sider>
+    }
+
+    <nz-layout class="main-layout">
+        <nz-header class="app-header">
+            @if (authApi.isAuthenticated()) {
+            <button nz-button nzType="text" type="button" aria-controls="main-navigation"
+                [attr.aria-expanded]="!isCollapsed" (click)="isCollapsed = !isCollapsed">
+                {{ isCollapsed ? 'Mostra menu' : 'Nascondi menu' }}
+            </button>
+
+            <h1>Gestione note spese</h1>
+            } @else {
+            <a routerLink="/home" class="header-logo" aria-label="Pagina iniziale">
+                <img src="images/mechanica.svg" alt="Logo Mechanica" />
+            </a>
+            }
+
+            <div class="account-menu">
+                @if (authApi.isAuthenticated()) {
+                <button nz-button nz-dropdown type="button" nzTrigger="click" [nzDropdownMenu]="userMenu"
+                    [nzLoading]="uscitaInCorso" [disabled]="uscitaInCorso">
+                    {{ authApi.getCurrentUser()?.userName }} ▾
+                </button>
+
+                <nz-dropdown-menu #userMenu="nzDropdownMenu">
+                    <ul nz-menu>
+                        <li nz-menu-item [nzDisabled]="uscitaInCorso" (click)="esci()">
+                            Esci
+                        </li>
+                    </ul>
+                </nz-dropdown-menu>
+                } @else {
+                <button nz-button nzType="primary" type="button" (click)="openLoginModal()">
+                    Accedi
+                </button>
+                }
+            </div>
+        </nz-header>
+
+        <nz-content class="app-content">
+            <router-outlet />
+        </nz-content>
+    </nz-layout>
+</nz-layout>

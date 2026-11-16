@@ -1,0 +1,165 @@
+<form nz-form [formGroup]="reportForm" nzLayout="vertical">
+    <nz-form-item>
+        <nz-form-label nzFor="report-people" nzRequired>
+            Persona
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Seleziona una persona">
+            <nz-select nzId="report-people" formControlName="peopleId" nzPlaceHolder="Seleziona una persona"
+                nzShowSearch>
+                @for (persona of peoples; track persona.peopleId) {
+                <nz-option [nzValue]="persona.peopleId" [nzLabel]="persona.name + ' ' + persona.surname"></nz-option>
+                }
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="report-cost-center" nzRequired>
+            Centro di costo predefinito
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Seleziona un centro di costo">
+            <nz-select nzId="report-cost-center" formControlName="costCenterId"
+                nzPlaceHolder="Seleziona un centro di costo" nzShowSearch>
+                @for (costCenter of costCenters; track costCenter.costCenterId) {
+                <nz-option [nzValue]="costCenter.costCenterId" [nzLabel]="costCenter.code"></nz-option>
+                }
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="report-month" nzRequired>
+            Mese
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Seleziona un mese">
+            <nz-select nzId="report-month" formControlName="month">
+                @for (month of months; track month) {
+                <nz-option [nzValue]="$index + 1" [nzLabel]="month"></nz-option>
+                }
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="report-year" nzRequired>
+            Anno
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci un anno intero tra 1 e 9999">
+            <nz-input-number nzId="report-year" formControlName="year" [nzMin]="1" [nzMax]="9999"
+                [nzPrecision]="0"></nz-input-number>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="report-description" nzRequired>
+            Descrizione
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci una descrizione di massimo 500 caratteri">
+            <textarea nz-input nzId="report-description" id="report-description" formControlName="description"
+                rows="3"></textarea>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+
+<h3>Voci di spesa</h3>
+
+@if (!solaLettura) {
+<button nz-button nzType="primary" type="button" [disabled]="salvataggio" (click)="onAddItem()">
+    Aggiungi voce
+</button>
+}
+
+<nz-table #itemsTable [nzData]="expenseItems" [nzFrontPagination]="false" [nzShowPagination]="false"
+    nzNoResult="Nessuna voce di spesa presente.">
+    <thead>
+        <tr>
+            <th>Giorno</th>
+            <th>Descrizione</th>
+            <th>Categoria</th>
+            <th>Valuta</th>
+            <th>Importo estero</th>
+            <th>Importo EUR</th>
+
+            <th>Azioni</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (group of getExpenseGroups(itemsTable.data); track group.label) {
+        @if (group.label) {
+        <tr>
+            <th colspan="7" scope="rowgroup">{{ group.label }}</th>
+        </tr>
+        }
+
+        @for (item of group.items; track $index) {
+        <tr>
+            <td>{{ item.dayOfMonth }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.currencyCode }}</td>
+
+            <td>
+                @if (item.foreignAmount != null) {
+                {{ item.foreignAmount | number:'1.2-2' }}
+                } @else {
+                —
+                }
+            </td>
+
+            <td>
+                {{ item.amountEur | currency:'EUR':'symbol':'1.2-2' }}
+            </td>
+
+            <td>
+                <button nz-button nz-dropdown type="button" nzTrigger="click" [disabled]="salvataggio"
+                    [nzDropdownMenu]="itemActions">
+                    Azioni ▾
+                </button>
+
+                <nz-dropdown-menu #itemActions="nzDropdownMenu">
+                    <ul nz-menu>
+                        <li nz-menu-item (click)="onViewItem(item)">
+                            Dettagli
+                        </li>
+
+                        @if (!solaLettura) {
+                        <li nz-menu-item (click)="onAddItem(item)">
+                            Modifica
+                        </li>
+
+                        <li nz-menu-item nzDanger (click)="onRemoveItem(item)">
+                            Rimuovi
+                        </li>
+                        }
+                    </ul>
+                </nz-dropdown-menu>
+            </td>
+        </tr>
+        }
+        }
+    </tbody>
+</nz-table>
+
+<p>
+    <strong>
+        Totale: {{ getTotal() | currency:'EUR':'symbol':'1.2-2' }}
+    </strong>
+</p>
+
+<div class="modal-actions">
+    <button nz-button type="button" [disabled]="salvataggio" (click)="onCancel()">
+        {{ solaLettura ? 'Chiudi' : 'Annulla' }}
+    </button>
+
+    @if (!solaLettura) {
+    <button nz-button nzType="primary" type="button" [nzLoading]="salvataggio" (click)="onSave()">
+        Salva nota spese
+    </button>
+    }
+</div>

@@ -1,0 +1,125 @@
+:host {
+  display: block;
+}
+
+.app-layout {
+  min-height: 100dvh;
+}
+
+.menu-sidebar {
+  background: #fff;
+  border-right: 1px solid #e7e6e6;
+  overflow: hidden;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  padding: 0 24px;
+  border-bottom: 1px solid #e7e6e6;
+  font-size: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sidebar-logo img {
+  display: block;
+  height: 48px;
+  width: auto;
+  max-width: 100%;
+}
+
+.main-layout {
+  min-width: 0;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  min-height: 64px;
+  height: auto;
+  padding: 12px 24px;
+  line-height: normal;
+  background: #fff;
+  border-bottom: 1px solid #e7e6e6;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.app-content {
+  min-width: 0;
+  margin: 24px;
+  padding: 24px;
+  background: #fff;
+  overflow-x: auto;
+}
+
+@media (max-width: 767px) {
+  .app-header {
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .app-header h1 {
+    font-size: 18px;
+  }
+
+  .app-content {
+    margin: 12px;
+    padding: 16px;
+  }
+}
+
+  .account-menu {
+  margin-left: auto;
+}
+
+.public-layout {
+  background: #fff;
+
+  .main-layout {
+    background: #fff;
+  }
+
+  .app-header {
+    min-height: 64px;
+    padding: 8px 12px;
+    background: #1b698f;
+    border-bottom: 0;
+    color: #fff;
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .header-logo img {
+    display: block;
+    width: 120px;
+    height: 48px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+
+  .account-menu button {
+    background: transparent;
+    border-color: transparent;
+    color: #fff;
+    box-shadow: none;
+    font-size: 18px;
+  }
+
+  .app-content {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+}

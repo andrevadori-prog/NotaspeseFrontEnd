@@ -1,0 +1,191 @@
+<form nz-form [formGroup]="itemForm" nzLayout="vertical">
+    <nz-form-item>
+        <nz-form-label nzFor="item-day" nzRequired>
+            Giorno
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci un giorno valido">
+            <nz-input-number nzId="item-day" formControlName="dayOfMonth" [nzMin]="1" [nzMax]="maxDay"
+                [nzPrecision]="0"></nz-input-number>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="item-description" nzRequired>
+            Descrizione
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci una descrizione di massimo 500 caratteri">
+            <textarea nz-input id="item-description" formControlName="description" rows="3"></textarea>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="item-category" nzRequired>
+            Categoria
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci una categoria di massimo 100 caratteri">
+            <input nz-input id="item-category" formControlName="category" />
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="item-commission">
+            Commessa
+        </nz-form-label>
+
+        <nz-form-control>
+            <nz-select nzId="item-commission" formControlName="commissionId" nzPlaceHolder="Nessuna commessa"
+                nzShowSearch nzAllowClear>
+                @for (commission of commissions; track commission.commissionId) {
+                <nz-option [nzValue]="commission.commissionId" [nzLabel]="commission.code"></nz-option>
+                }
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="item-currency" nzRequired>
+            Valuta
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci un codice valuta di tre lettere">
+            <input nz-input id="item-currency" formControlName="currencyCode" placeholder="EUR" />
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="item-foreign-amount">
+            Importo estero
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci un importo valido">
+            <nz-input-number nzId="item-foreign-amount" formControlName="foreignAmount" [nzMin]="0"
+                [nzMax]="99999999.99" [nzPrecision]="2"></nz-input-number>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="item-eur-amount" nzRequired>
+            Importo in euro
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci un importo positivo">
+            <nz-input-number nzId="item-eur-amount" formControlName="amountEur" [nzMin]="0.01" [nzMax]="99999999.99"
+                [nzPrecision]="2"></nz-input-number>
+        </nz-form-control>
+    </nz-form-item>
+    @if (
+    itemForm.hasError('foreignAmountWithEur') &&
+    (itemForm.dirty || itemForm.touched)
+    ) {
+    <p role="alert">
+        Con valuta EUR, lascia vuoto l’importo estero.
+    </p>
+    }
+</form>
+
+<h3>Ripartizioni per centro di costo</h3>
+
+<p>
+    La percentuale non ripartita resta al centro di costo
+    predefinito della nota.
+</p>
+
+@if (!solaLettura) {
+<form nz-form [formGroup]="detailForm" nzLayout="vertical">
+    <nz-form-item>
+        <nz-form-label nzFor="detail-cost-center" nzRequired>
+            Centro di costo
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Seleziona un centro di costo">
+            <nz-select nzId="detail-cost-center" formControlName="costCenterId" nzPlaceHolder="Seleziona un centro"
+                nzShowSearch nzAllowClear>
+                @for (
+                center of getAvailableCostCenters();
+                track center.costCenterId
+                ) {
+                <nz-option [nzValue]="center.costCenterId" [nzLabel]="center.code">
+                </nz-option>
+                }
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="detail-percent" nzRequired>
+            Percentuale
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci una percentuale tra 0,01 e 100">
+            <nz-input-number nzId="detail-percent" formControlName="perCent" [nzMin]="0.01" [nzMax]="100"
+                [nzPrecision]="2">
+            </nz-input-number>
+        </nz-form-control>
+    </nz-form-item>
+
+    <button nz-button type="button" (click)="onAddDetail()">
+        {{ editingDetail ? 'Salva ripartizione' : 'Aggiungi ripartizione' }}
+    </button>
+
+    <button nz-button type="button" (click)="onResetDetail()">
+        {{ editingDetail ? 'Annulla modifica' : 'Svuota campi' }}
+    </button>
+</form>
+}
+
+<nz-table #detailsTable [nzData]="expenseItemDetails" [nzFrontPagination]="false" [nzShowPagination]="false"
+    nzNoResult="Nessuna ripartizione aggiuntiva.">
+    <thead>
+        <tr>
+            <th>Centro di costo</th>
+            <th>Percentuale</th>
+            @if (!solaLettura) {
+            <th>Azioni</th>
+            }
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (detail of detailsTable.data; track $index) {
+        <tr>
+            <td>{{ getCostCenterCode(detail.costCenterId) }}</td>
+            <td>{{ detail.perCent | number:'1.2-2' }}%</td>
+
+            @if (!solaLettura) {
+            <td>
+                <button nz-button type="button" (click)="onEditDetail(detail)">
+                    Modifica
+                </button>
+
+                <button nz-button nzDanger type="button" (click)="onRemoveDetail(detail)">
+                    Rimuovi
+                </button>
+            </td>
+            }
+        </tr>
+        }
+    </tbody>
+</nz-table>
+
+<p>
+    Centro predefinito
+    ({{ getCostCenterCode(defaultCostCenterId) }}):
+    <strong>
+        {{ (100 - getAllocatedPercent()) | number:'1.2-2' }}%
+    </strong>
+</p>
+
+<div class="modal-actions">
+    <button nz-button type="button" (click)="onCancel()">
+        {{ solaLettura ? 'Chiudi' : 'Annulla' }}
+    </button>
+
+    @if (!solaLettura) {
+    <button nz-button nzType="primary" type="button" (click)="onSave()">
+        Conferma voce
+    </button>
+    }
+</div>

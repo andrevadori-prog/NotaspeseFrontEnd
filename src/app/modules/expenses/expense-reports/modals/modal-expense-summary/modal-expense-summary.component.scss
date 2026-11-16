@@ -1,0 +1,54 @@
+:host {
+  display: block;
+}
+
+.expense-summary {
+  padding: 8px 0;
+}
+
+.summary-information {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 16px 0 24px;
+}
+
+.summary-information p {
+  margin: 0;
+  padding: 12px;
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+}
+
+h4 {
+  margin-top: 28px;
+  margin-bottom: 12px;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding: 16px;
+  font-size: 18px;
+  background: #e6f7ff;
+  border: 1px solid #91d5ff;
+  border-radius: 4px;
+}
+
+.summary-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: 12px 0 20px;
+}
+
+@media print {
+  .summary-actions {
+    display: none;
+  }
+
+  .expense-summary {
+    padding: 0;
+  }
+}

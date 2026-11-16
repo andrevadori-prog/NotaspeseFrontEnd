@@ -1,0 +1,79 @@
+<div class="page-toolbar">
+    <h2>Note spese</h2>
+
+    <button nz-button nzType="primary" type="button" [disabled]="!anagraficheCaricate || caricamentoAnagrafiche"
+        (click)="onOpen()">
+        Nuova nota spese
+    </button>
+</div>
+
+@if (caricamentoAnagrafiche) {
+<p>Caricamento persone, centri di costo e commesse...</p>
+} @else if (!anagraficheCaricate) {
+<button nz-button type="button" (click)="caricaAnagrafiche()">
+    Riprova caricamento
+</button>
+} @else {
+<app-expense-reports-filter class="page-filters" [peoples]="peoples" [costCenters]="costCenters"
+    (onFilterChange)="onFilterChange($event)">
+</app-expense-reports-filter>
+
+
+<nz-table #reportTable [nzData]="expenseReports" [nzLoading]="nzHelper.loading" [nzFrontPagination]="false"
+    [nzTotal]="pagination.collectionSize" [nzPageIndex]="pagination.currentPage" [nzPageSize]="pagination.pageSize"
+    [nzShowSizeChanger]="true" (nzQueryParams)="onQueryParamsChange($event)">
+    <thead>
+        <tr>
+            <th nzColumnKey="Year" [nzSortFn]="true">Anno</th>
+            <th nzColumnKey="Month" [nzSortFn]="true">Mese</th>
+            <th>Persona</th>
+            <th>Centro di costo</th>
+            <th nzColumnKey="Description" [nzSortFn]="true">
+                Descrizione
+            </th>
+            <th>Totale</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (report of reportTable.data; track report.expenseReportId) {
+        <tr>
+            <td>{{ report.year }}</td>
+            <td>{{ report.month | number:'2.0-0' }}</td>
+            <td>{{ getPeopleName(report.peopleId) }}</td>
+            <td>{{ getCostCenterCode(report.costCenterId) }}</td>
+            <td>{{ report.description }}</td>
+            <td>
+                {{ getReportTotal(report) | currency:'EUR':'symbol':'1.2-2' }}
+            </td>
+            <td>
+                <button nz-button nz-dropdown type="button" nzTrigger="click" [nzDropdownMenu]="reportActions">
+                    Azioni ▾
+                </button>
+
+                <nz-dropdown-menu #reportActions="nzDropdownMenu">
+                    <ul nz-menu>
+                        <li nz-menu-item (click)="onView(report)">
+                            Dettagli
+                        </li>
+
+                        <li nz-menu-item (click)="onSummary(report)">
+                            Riepilogo
+                        </li>
+
+                        <li nz-menu-item (click)="onEdit(report)">
+                            Modifica
+                        </li>
+
+                        <li nz-menu-item nzDanger (click)="onDelete(report)">
+                            Elimina
+                        </li>
+                    </ul>
+                </nz-dropdown-menu>
+            </td>
+        </tr>
+        }
+    </tbody>
+</nz-table>
+}

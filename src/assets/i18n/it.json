@@ -1,0 +1,11 @@
+{
+    "auth": {
+        "login": "Accedi",
+        "userName": "Nome utente",
+        "password": "Password"
+    },
+    "common": {
+        "cancel": "Annulla",
+        "form-invalid": "Compila correttamente i campi obbligatori."
+    }
+}

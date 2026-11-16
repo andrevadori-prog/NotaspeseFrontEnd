@@ -1,0 +1,59 @@
+<div class="page-toolbar">
+    <h2>Centri di costo</h2>
+
+    @if (authApi.hasRole('Admin')) {
+    <button nz-button nzType="primary" type="button" (click)="onOpen()">
+        Nuovo centro di costo
+    </button>
+    }
+</div>
+
+<app-cost-centers-filter class="page-filters" (onFilterChange)="onFilterChange($event)">
+</app-cost-centers-filter>
+
+<nz-table #costCenterTable [nzData]="costCenters" [nzLoading]="nzHelper.loading" [nzFrontPagination]="false"
+    [nzTotal]="pagination.collectionSize" [nzPageIndex]="pagination.currentPage" [nzPageSize]="pagination.pageSize"
+    [nzShowSizeChanger]="true" (nzQueryParams)="onQueryParamsChange($event)">
+    <thead>
+        <tr>
+            <th>Codice</th>
+            <th>Nome</th>
+            <th>Descrizione</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (costCenter of costCenterTable.data; track costCenter.costCenterId) {
+        <tr>
+            <td>{{ costCenter.code }}</td>
+            <td>{{ costCenter.costCenterName }}</td>
+            <td>{{ costCenter.description }}</td>
+
+            <td>
+                <button nz-button nz-dropdown type="button" nzTrigger="click" [nzDropdownMenu]="costCenterActions">
+                    Azioni ▾
+                </button>
+
+                <nz-dropdown-menu #costCenterActions="nzDropdownMenu">
+                    <ul nz-menu>
+                        <li nz-menu-item (click)="onView(costCenter)">
+                            Dettagli
+                        </li>
+
+                        @if (authApi.hasRole('Admin')) {
+                        <li nz-menu-item (click)="onEdit(costCenter)">
+                            Modifica
+                        </li>
+
+                        <li nz-menu-item nzDanger (click)="onDelete(costCenter)">
+                            Elimina
+                        </li>
+                        }
+                    </ul>
+                </nz-dropdown-menu>
+            </td>
+        </tr>
+        }
+    </tbody>
+</nz-table>

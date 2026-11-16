@@ -1,0 +1,68 @@
+<form nz-form [formGroup]="commissionForm" nzLayout="vertical" (ngSubmit)="onSubmit()">
+    <nz-form-item>
+        <nz-form-label nzFor="commission-code" nzRequired>
+            Codice
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci un codice di massimo 50 caratteri">
+            <input nz-input id="commission-code" formControlName="code" />
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="commission-description" nzRequired>
+            Descrizione
+        </nz-form-label>
+
+        <nz-form-control nzErrorTip="Inserisci una descrizione di massimo 250 caratteri">
+            <textarea nz-input id="commission-description" formControlName="description" rows="3"></textarea>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="commission-type" nzRequired>
+            Tipo
+        </nz-form-label>
+
+        <nz-form-control>
+            <nz-select nzId="commission-type" formControlName="type">
+                <nz-option [nzValue]="CommissionType.Planning" nzLabel="Progetto"></nz-option>
+
+                <nz-option [nzValue]="CommissionType.Modified" nzLabel="Modifica"></nz-option>
+
+                <nz-option [nzValue]="CommissionType.Replacement" nzLabel="Ricambi"></nz-option>
+
+                <nz-option [nzValue]="CommissionType.Training" nzLabel="Formazione"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="commission-status" nzRequired>
+            Stato
+        </nz-form-label>
+
+        <nz-form-control>
+            <nz-select nzId="commission-status" formControlName="status">
+                <nz-option [nzValue]="RecordStatus.Active" nzLabel="Attiva"></nz-option>
+
+                <nz-option [nzValue]="RecordStatus.Obsolete" nzLabel="Obsoleta"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    @if (errore) {
+    <p role="alert">{{ errore }}</p>
+    }
+
+    <div class="modal-actions">
+        <button nz-button type="button" [disabled]="salvataggio" (click)="onCancel()">
+            {{ solaLettura ? 'Chiudi' : 'Annulla' }}
+        </button>
+
+        @if (!solaLettura) {
+        <button nz-button nzType="primary" type="submit" [nzLoading]="salvataggio" [disabled]="salvataggio">
+            Salva
+        </button>
+        }
+    </div>
+</form>

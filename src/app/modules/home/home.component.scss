@@ -1,0 +1,22 @@
+:host {
+  display: block;
+}
+
+.home-logo {
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.home-logo img {
+  display: block;
+  width: 70%;
+  max-width: 1140px;
+  height: auto;
+}
+
+@media (max-width: 767px) {
+  .home-logo img {
+    width: 100%;
+  }
+}

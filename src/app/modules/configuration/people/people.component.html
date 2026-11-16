@@ -1,0 +1,78 @@
+<div class="page-toolbar">
+    <h2>Persone</h2>
+
+    <button nz-button nzType="primary" type="button" (click)="onOpen()">
+        Nuova persona
+    </button>
+</div>
+
+<app-people-filter class="page-filters" (onFilterChange)="onFilterChange($event)">
+</app-people-filter>
+
+@if (errore) {
+<p role="alert">{{ errore }}</p>
+}
+
+<nz-table #peopleTable [nzData]="peoples" [nzLoading]="nzHelper.loading" [nzFrontPagination]="false"
+    [nzTotal]="pagination.collectionSize" [nzPageIndex]="pagination.currentPage" [nzPageSize]="pagination.pageSize"
+    [nzShowSizeChanger]="true" (nzQueryParams)="onQueryParamsChange($event)">
+    <thead>
+        <tr>
+            <th nzColumnKey="Name" [nzSortFn]="true">
+                Nome
+            </th>
+
+            <th nzColumnKey="Surname" [nzSortFn]="true">
+                Cognome
+            </th>
+
+            <th>Badge</th>
+
+            <th nzColumnKey="Active" [nzSortFn]="true">Stato</th>
+
+            <th>Azioni</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (persona of peopleTable.data; track persona.peopleId) {
+        <tr>
+            <td>{{ persona.name }}</td>
+            <td>{{ persona.surname }}</td>
+            <td>{{ persona.badge ?? '—' }}</td>
+
+            <td>
+                @if (persona.active === ConfigEnableMode.Enabled) {
+                Abilitato
+                } @else if (persona.active === ConfigEnableMode.Disabled) {
+                Disabilitato
+                } @else {
+                —
+                }
+            </td>
+
+            <td>
+                <button nz-button nz-dropdown type="button" nzTrigger="click" [nzDropdownMenu]="peopleActions">
+                    Azioni ▾
+                </button>
+
+                <nz-dropdown-menu #peopleActions="nzDropdownMenu">
+                    <ul nz-menu>
+                        <li nz-menu-item (click)="onView(persona)">
+                            Dettagli
+                        </li>
+
+                        <li nz-menu-item (click)="onEdit(persona)">
+                            Modifica
+                        </li>
+
+                        <li nz-menu-item nzDanger (click)="onDelete(persona)">
+                            Elimina
+                        </li>
+                    </ul>
+                </nz-dropdown-menu>
+            </td>
+        </tr>
+        }
+    </tbody>
+</nz-table>

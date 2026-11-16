@@ -1,0 +1,28 @@
+<nz-card class="filter-card" nzTitle="Filtri di ricerca">
+    <form class="filter-grid" [formGroup]="filterForm" (ngSubmit)="handleFilterChange()">
+        <div>
+            <label for="cost-center-filter-code">Codice</label>
+            <input nz-input id="cost-center-filter-code" formControlName="code" />
+        </div>
+
+        <div>
+            <label for="cost-center-filter-name">Nome</label>
+            <input nz-input id="cost-center-filter-name" formControlName="costCenterName" />
+        </div>
+
+        <div>
+            <label for="cost-center-filter-description">Descrizione</label>
+            <input nz-input id="cost-center-filter-description" formControlName="description" />
+        </div>
+
+        <div class="filter-actions">
+            <button nz-button nzType="primary" type="submit">
+                Cerca
+            </button>
+
+            <button nz-button type="button" (click)="resetFilters()">
+                Azzera
+            </button>
+        </div>
+    </form>
+</nz-card>

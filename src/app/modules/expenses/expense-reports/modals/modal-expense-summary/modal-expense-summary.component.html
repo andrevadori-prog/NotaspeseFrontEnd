@@ -1,0 +1,163 @@
+@if (report) {
+<section class="expense-summary">
+    <h3>Nota spese di {{ personName }}</h3>
+
+    <div class="summary-actions">
+        <button nz-button nzType="primary" type="button" (click)="onPrint()">
+            Stampa riepilogo
+        </button>
+    </div>
+
+    <div class="summary-information">
+        <p>
+            <strong>Periodo</strong><br>
+            {{ monthName }} {{ report.year }}
+        </p>
+
+        <p>
+            <strong>Descrizione</strong><br>
+            {{ report.description }}
+        </p>
+
+        <p>
+            <strong>Centro di costo predefinito</strong><br>
+            {{ getCostCenterCode(report.costCenterId) }}
+        </p>
+    </div>
+
+    <h4>Altre spese</h4>
+
+    @if (otherExpenses.length > 0) {
+    <nz-table #otherExpensesTable [nzData]="otherExpenses" [nzShowPagination]="false" nzSize="small">
+        <thead>
+            <tr>
+                <th>Giorno</th>
+                <th>Commessa</th>
+                <th>Descrizione</th>
+                <th>Categoria</th>
+                <th>Valuta</th>
+                <th nzAlign="right">Importo</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @for (item of otherExpensesTable.data; track item.expenseItemId) {
+            <tr>
+                <td>{{ item.dayOfMonth }}</td>
+                <td>{{ getCommissionCode(item.commissionId) }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.category }}</td>
+                <td>
+                    @if (item.foreignAmount !== null) {
+                    {{ item.foreignAmount | number:'1.2-2' }}
+                    {{ item.currencyCode }}
+                    } @else {
+                    —
+                    }
+                </td>
+                <td nzAlign="right">
+                    {{ item.amountEur | currency:'EUR':'symbol':'1.2-2' }}
+                </td>
+            </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td colspan="5"><strong>Totale altre spese</strong></td>
+                <td nzAlign="right">
+                    <strong>
+                        {{ getTotal(otherExpenses) | currency:'EUR':'symbol':'1.2-2' }}
+                    </strong>
+                </td>
+            </tr>
+        </tfoot>
+    </nz-table>
+    } @else {
+    <p>Nessuna voce diversa dalle spese auto.</p>
+    }
+
+    <h4>Spese auto</h4>
+
+    @if (autoExpenses.length > 0) {
+    <nz-table #autoExpensesTable [nzData]="autoExpenses" [nzShowPagination]="false" nzSize="small">
+        <thead>
+            <tr>
+                <th>Giorno</th>
+                <th>Commessa</th>
+                <th>Descrizione</th>
+                <th>Categoria</th>
+                <th>Valuta</th>
+                <th nzAlign="right">Importo</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @for (item of autoExpensesTable.data; track item.expenseItemId) {
+            <tr>
+                <td>{{ item.dayOfMonth }}</td>
+                <td>{{ getCommissionCode(item.commissionId) }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.category }}</td>
+                <td>
+                    @if (item.foreignAmount !== null) {
+                    {{ item.foreignAmount | number:'1.2-2' }}
+                    {{ item.currencyCode }}
+                    } @else {
+                    —
+                    }
+                </td>
+                <td nzAlign="right">
+                    {{ item.amountEur | currency:'EUR':'symbol':'1.2-2' }}
+                </td>
+            </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td colspan="5"><strong>Totale spese auto</strong></td>
+                <td nzAlign="right">
+                    <strong>
+                        {{ getTotal(autoExpenses) | currency:'EUR':'symbol':'1.2-2' }}
+                    </strong>
+                </td>
+            </tr>
+        </tfoot>
+    </nz-table>
+    } @else {
+    <p>Nessuna spesa auto.</p>
+    }
+
+    <h4>Ripartizione per centro di costo</h4>
+
+    <nz-table #costCenterTotalsTable [nzData]="getCostCenterTotals()" [nzShowPagination]="false" nzSize="small">
+        <thead>
+            <tr>
+                <th>Centro di costo</th>
+                <th nzAlign="right">Importo attribuito</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @for (total of costCenterTotalsTable.data; track total.costCenterId) {
+            <tr>
+                <td>{{ total.code }}</td>
+                <td nzAlign="right">
+                    {{ total.amountEur | currency:'EUR':'symbol':'1.2-2' }}
+                </td>
+            </tr>
+            }
+        </tbody>
+    </nz-table>
+
+    <div class="summary-total">
+        Totale nota spese
+        <strong>
+            {{ getTotal(report.expenseItems) | currency:'EUR':'symbol':'1.2-2' }}
+        </strong>
+    </div>
+</section>
+} @else {
+<p>Riepilogo non disponibile.</p>
+}
