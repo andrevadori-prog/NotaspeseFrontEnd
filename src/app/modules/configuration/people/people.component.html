@@ -28,6 +28,8 @@
 
             <th>Badge</th>
 
+            <th>Utente</th>
+
             <th nzColumnKey="Active" [nzSortFn]="true">Stato</th>
 
             <th>Azioni</th>
@@ -40,6 +42,7 @@
             <td>{{ persona.name }}</td>
             <td>{{ persona.surname }}</td>
             <td>{{ persona.badge ?? '—' }}</td>
+            <td>{{ getUserName(persona.userId)}}</td>
 
             <td>
                 @if (persona.active === ConfigEnableMode.Enabled) {

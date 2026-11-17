@@ -129,7 +129,14 @@ export class PeopleComponent implements OnInit {
     });
 
     const component = modalRef.componentInstance!;
-    component.userList = this.userList;
+
+    const usedUserIds = new Set(
+      this.peoples
+        .filter(p => p.peopleId !== people?.peopleId && p.userId != null)
+        .map(p => p.userId)
+    );
+
+    component.userList = this.userList.filter(u => !usedUserIds.has(u.userId));
     component.people = people;
     component.readOnly = solaLettura;
 
@@ -159,14 +166,15 @@ export class PeopleComponent implements OnInit {
 
           this.findPeoples();
         },
-        error: () => {
+        error: (err) => {
           component.salvataggio = false;
           component.peopleForm.enable();
-
-          this.notification.error(
-            'Persone',
-            'Salvataggio non riuscito. Controlla i dati e riprova.'
-          );
+          const message = err?.error?.Message;
+          const messaggio =
+            typeof message === 'string' && message.trim()
+              ? message
+              : 'Salvataggio non riuscito. Controlla i dati e riprova.';
+          this.notification.error('Persone', messaggio);
         }
       });
     });
@@ -216,5 +224,12 @@ export class PeopleComponent implements OnInit {
         );
       }
     });
+  }
+
+  getUserName(userId: string | null): string {
+    if (!userId) {
+      return '-';
+    }
+    return this.userList.find(u => u.userId === userId)?.userName ?? '-';
   }
 }

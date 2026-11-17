@@ -1,8 +1,8 @@
 <nz-card class="filter-card" nzTitle="Filtri di ricerca">
     <form class="filter-grid" [formGroup]="filterForm" (ngSubmit)="handleFilterChange()">
+        @if (peoples.length > 1) {
         <div>
             <label for="report-filter-people">Persona</label>
-
             <nz-select nzId="report-filter-people" formControlName="peopleId" nzPlaceHolder="Tutte le persone"
                 nzShowSearch nzAllowClear style="width: 100%">
                 @for (persona of peoples; track persona.peopleId) {
@@ -10,10 +10,9 @@
                 }
             </nz-select>
         </div>
-
+        }
         <div>
             <label for="report-filter-cost-center">Centro di costo</label>
-
             <nz-select nzId="report-filter-cost-center" formControlName="costCenterId"
                 nzPlaceHolder="Tutti i centri di costo" nzShowSearch nzAllowClear style="width: 100%">
                 @for (costCenter of costCenters; track costCenter.costCenterId) {
@@ -21,10 +20,8 @@
                 }
             </nz-select>
         </div>
-
         <div>
             <label for="report-filter-month">Mese</label>
-
             <nz-select nzId="report-filter-month" formControlName="month" nzPlaceHolder="Tutti i mesi" nzAllowClear
                 style="width: 100%">
                 @for (month of months; track month) {
@@ -32,23 +29,18 @@
                 }
             </nz-select>
         </div>
-
         <div>
             <label for="report-filter-year">Anno</label>
-
             <nz-input-number nzId="report-filter-year" formControlName="year" nzPlaceHolder="Tutti gli anni" [nzMin]="1"
                 [nzMax]="9999" [nzPrecision]="0"></nz-input-number>
-
             @if (filterForm.controls.year.invalid && filterForm.controls.year.touched) {
             <p role="alert">Inserisci un anno intero tra 1 e 9999.</p>
             }
         </div>
-
         <div class="filter-actions">
             <button nz-button nzType="primary" type="submit">
                 Cerca
             </button>
-
             <button nz-button type="button" (click)="resetFilters()">
                 Azzera
             </button>

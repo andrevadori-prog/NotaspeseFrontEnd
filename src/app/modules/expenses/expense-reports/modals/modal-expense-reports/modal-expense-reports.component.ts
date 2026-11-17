@@ -86,11 +86,14 @@ export class ModalExpenseReportsComponent {
   @Input()
   set report(value: ExpenseReport | undefined) {
     this.currentReport = value;
-
     this.expenseItems = structuredClone(value?.expenseItems ?? []);
 
+    const defaultPeopleId =
+      value?.peopleId ??
+      (this.peoples.length === 1 ? this.peoples[0].peopleId : null);
+
     this.reportForm.reset({
-      peopleId: value?.peopleId ?? null,
+      peopleId: defaultPeopleId,
       costCenterId: value?.costCenterId ?? null,
       month: value?.month ?? this.oggi.getMonth() + 1,
       year: value?.year ?? this.oggi.getFullYear(),
