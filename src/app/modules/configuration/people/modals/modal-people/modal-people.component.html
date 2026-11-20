@@ -1,4 +1,20 @@
 <form nz-form [formGroup]="peopleForm" nzLayout="vertical" (ngSubmit)="onSubmit()">
+    @if (solaLettura && currentPeople) {
+    <nz-form-item>
+        <nz-form-label>ID Persona</nz-form-label>
+        <nz-form-control>
+            <input nz-input [value]="currentPeople.peopleId" disabled />
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label>ID Utente collegato</nz-form-label>
+        <nz-form-control>
+            <input nz-input [value]="currentPeople.userId ?? '—'" disabled />
+        </nz-form-control>
+    </nz-form-item>
+    }
+
     <nz-form-item>
         <nz-form-label nzFor="people-name" nzRequired>
             Nome

@@ -1,4 +1,12 @@
 <form nz-form [formGroup]="reportForm" nzLayout="vertical">
+    @if (solaLettura && currentReport) {
+    <nz-form-item>
+        <nz-form-label>ID Nota spese</nz-form-label>
+        <nz-form-control>
+            <input nz-input [value]="currentReport.expenseReportId" disabled />
+        </nz-form-control>
+    </nz-form-item>
+    }
     <nz-form-item>
         <nz-form-label nzFor="report-people" nzRequired>
             Persona
@@ -78,6 +86,9 @@
     nzNoResult="Nessuna voce di spesa presente.">
     <thead>
         <tr>
+            @if (solaLettura) {
+            <th>ID Voce</th>
+            }
             <th>Giorno</th>
             <th>Descrizione</th>
             <th>Categoria</th>
@@ -93,12 +104,15 @@
         @for (group of getExpenseGroups(itemsTable.data); track group.label) {
         @if (group.label) {
         <tr>
-            <th colspan="7" scope="rowgroup">{{ group.label }}</th>
+            <th [attr.colspan]="solaLettura ? 8 : 7" scope="rowgroup">{{ group.label }}</th>
         </tr>
         }
 
         @for (item of group.items; track $index) {
         <tr>
+            @if (solaLettura) {
+            <td>{{ item.expenseItemId }}</td>
+            }
             <td>{{ item.dayOfMonth }}</td>
             <td>{{ item.description }}</td>
             <td>{{ item.category }}</td>

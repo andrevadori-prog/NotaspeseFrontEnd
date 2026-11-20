@@ -32,7 +32,7 @@ export class ModalCommissionsComponent {
   errore = '';
   solaLettura = false;
 
-  private currentCommission?: Commission;
+  currentCommission?: Commission;
   commissionForm = this.fb.nonNullable.group({
     code: ['', [
       Validators.required,

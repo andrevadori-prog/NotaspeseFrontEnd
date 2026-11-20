@@ -1,4 +1,13 @@
 <form nz-form [formGroup]="commissionForm" nzLayout="vertical" (ngSubmit)="onSubmit()">
+    @if (solaLettura && currentCommission) {
+    <nz-form-item>
+        <nz-form-label>ID Commessa</nz-form-label>
+        <nz-form-control>
+            <input nz-input [value]="currentCommission.commissionId" disabled />
+        </nz-form-control>
+    </nz-form-item>
+    }
+
     <nz-form-item>
         <nz-form-label nzFor="commission-code" nzRequired>
             Codice

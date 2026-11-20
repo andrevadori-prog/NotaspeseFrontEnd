@@ -42,7 +42,7 @@ export class ModalPeopleComponent {
     active: [ConfigEnableMode.Enabled, Validators.required]
   });
 
-  private currentPeople?: People;
+  currentPeople?: People;
 
   @Input()
   set people(value: People | undefined) {

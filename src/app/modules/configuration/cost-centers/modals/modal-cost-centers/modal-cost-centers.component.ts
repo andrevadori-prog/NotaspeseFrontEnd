@@ -23,7 +23,7 @@ export class ModalCostCentersComponent {
   salvataggio = false;
   solaLettura = false;
 
-  private currentCostCenter?: CostCenter;
+  currentCostCenter?: CostCenter;
 
   costCenterForm = this.fb.nonNullable.group({
     code: ['', [

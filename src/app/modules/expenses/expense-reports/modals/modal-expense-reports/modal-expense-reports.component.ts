@@ -49,7 +49,7 @@ export class ModalExpenseReportsComponent {
   solaLettura = false;
   salvataggio = false;
 
-  private currentReport?: ExpenseReport;
+  currentReport?: ExpenseReport;
 
   reportForm = this.fb.group({
     peopleId: this.fb.control<string | null>(

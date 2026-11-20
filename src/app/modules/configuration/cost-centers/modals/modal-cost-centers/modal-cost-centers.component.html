@@ -1,4 +1,13 @@
 <form nz-form [formGroup]="costCenterForm" nzLayout="vertical" (ngSubmit)="onSubmit()">
+    @if (solaLettura && currentCostCenter) {
+    <nz-form-item>
+        <nz-form-label>ID Centro di costo</nz-form-label>
+        <nz-form-control>
+            <input nz-input [value]="currentCostCenter.costCenterId" disabled />
+        </nz-form-control>
+    </nz-form-item>
+    }
+
     <nz-form-item>
         <nz-form-label nzFor="cost-center-code" nzRequired>
             Codice

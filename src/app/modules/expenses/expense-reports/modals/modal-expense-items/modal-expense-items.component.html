@@ -1,4 +1,13 @@
 <form nz-form [formGroup]="itemForm" nzLayout="vertical">
+    @if (solaLettura && currentItem) {
+    <nz-form-item>
+        <nz-form-label>ID Voce di spesa</nz-form-label>
+        <nz-form-control>
+            <input nz-input [value]="currentItem.expenseItemId" disabled />
+        </nz-form-control>
+    </nz-form-item>
+    }
+
     <nz-form-item>
         <nz-form-label nzFor="item-day" nzRequired>
             Giorno
@@ -70,7 +79,6 @@
         <nz-form-label nzFor="item-eur-amount" nzRequired>
             Importo in euro
         </nz-form-label>
-
         <nz-form-control nzErrorTip="Inserisci un importo positivo">
             <nz-input-number nzId="item-eur-amount" formControlName="amountEur" [nzMin]="0.01" [nzMax]="99999999.99"
                 [nzPrecision]="2"></nz-input-number>
@@ -84,6 +92,39 @@
         Con valuta EUR, lascia vuoto l’importo estero.
     </p>
     }
+
+    <nz-form-item>
+        <nz-form-label>Foto scontrino / Allegato</nz-form-label>
+        <nz-form-control>
+            @if (!solaLettura) {
+            <input type="file" accept="image/*,application/pdf" (change)="onFileSelected($event)" />
+            }
+
+            @if (receiptBase64) {
+            <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 8px;">
+                <span>File: <strong>{{ receiptFileName }}</strong></span>
+
+                @if (receiptBase64.startsWith('data:image/')) {
+                <img [src]="receiptBase64" alt="Scontrino"
+                    style="max-width: 100%; max-height: 250px; object-fit: contain; border: 1px solid #d9d9d9; border-radius: 4px; padding: 4px;" />
+                }
+
+                <div style="display: flex; gap: 8px;">
+                    <a nz-button [href]="receiptBase64" [download]="receiptFileName || 'scontrino'">
+                        Scarica allegato
+                    </a>
+                    @if (!solaLettura) {
+                    <button nz-button nzDanger type="button" (click)="onRemoveReceipt()">
+                        Rimuovi scontrino
+                    </button>
+                    }
+                </div>
+            </div>
+            } @else if (solaLettura) {
+            <span>Nessuno scontrino allegato.</span>
+            }
+        </nz-form-control>
+    </nz-form-item>
 </form>
 
 <h3>Ripartizioni per centro di costo</h3>
@@ -140,6 +181,9 @@
     nzNoResult="Nessuna ripartizione aggiuntiva.">
     <thead>
         <tr>
+            @if (solaLettura) {
+            <th>ID Ripartizione</th>
+            }
             <th>Centro di costo</th>
             <th>Percentuale</th>
             @if (!solaLettura) {
@@ -151,6 +195,9 @@
     <tbody>
         @for (detail of detailsTable.data; track $index) {
         <tr>
+            @if (solaLettura) {
+            <td>{{ detail.expenseItemDetailId }}</td>
+            }
             <td>{{ getCostCenterCode(detail.costCenterId) }}</td>
             <td>{{ detail.perCent | number:'1.2-2' }}%</td>
 
