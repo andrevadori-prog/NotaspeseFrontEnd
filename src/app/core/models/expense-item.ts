@@ -13,6 +13,8 @@ export class ExpenseItem extends InternalModelBase {
     currencyCode: string;
     foreignAmount: number | null = null;
     amountEur: number;
+    receiptFileName: string | null = null;
+    receiptBase64: string | null = null;
 
     expenseItemDetails: ExpenseItemDetail[] = [];
 }

@@ -30,11 +30,13 @@ export class ModalExpenseItemsComponent {
 
   expenseItemDetails: ExpenseItemDetail[] = [];
   editingDetail?: ExpenseItemDetail;
+  receiptFileName: string | null = null;
+  receiptBase64: string | null = null;
 
   @Output() cancel = new EventEmitter<void>();
   @Output() save = new EventEmitter<ExpenseItem>();
 
-  private currentItem?: ExpenseItem;
+  currentItem?: ExpenseItem;
 
   private readonly currencyValidator: ValidatorFn = (control) => {
     const currency = control.get('currencyCode')?.value
@@ -125,6 +127,8 @@ export class ModalExpenseItemsComponent {
     this.expenseItemDetails = structuredClone(
       value?.expenseItemDetails ?? []
     );
+    this.receiptFileName = value?.receiptFileName ?? null;
+    this.receiptBase64 = value?.receiptBase64 ?? null;
 
     this.itemForm.reset({
       dayOfMonth: value?.dayOfMonth ?? 1,
@@ -148,6 +152,43 @@ export class ModalExpenseItemsComponent {
       this.itemForm.enable();
       this.detailForm.enable();
     }
+  }
+
+  onFileSelected(event: Event): void {
+    if (this.solaLettura) {
+      return;
+    }
+
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      this.notification.error(
+        'Allegato',
+        'Il file dello scontrino non può superare i 5 MB.'
+      );
+      input.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.receiptFileName = file.name;
+      this.receiptBase64 = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  onRemoveReceipt(): void {
+    if (this.solaLettura) {
+      return;
+    }
+
+    this.receiptFileName = null;
+    this.receiptBase64 = null;
   }
 
   getAvailableCostCenters(): CostCenterSlim[] {
@@ -362,6 +403,8 @@ export class ModalExpenseItemsComponent {
     item.currencyCode = value.currencyCode.toUpperCase();
     item.foreignAmount = value.foreignAmount;
     item.amountEur = value.amountEur;
+    item.receiptFileName = this.receiptFileName;
+    item.receiptBase64 = this.receiptBase64;
     item.expenseItemDetails = structuredClone(
       this.expenseItemDetails
     );
